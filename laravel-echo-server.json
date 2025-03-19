@@ -1,5 +1,5 @@
 {
-	"authHost": "http://localhost",
+	"authHost": "https://ecoasve.zeabur.app/",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [
 		{
@@ -8,12 +8,13 @@
 		}
 	],
 	"database": "redis",
-	"databaseConfig": {
-		"redis": {},
-		"sqlite": {
-			"databasePath": "/database/laravel-echo-server.sqlite"
-		}
-	},
+    "databaseConfig": {
+        "redis": {
+          "host": "novel-bird-36009.upstash.io",
+          "port": "6379",
+          "password": "AYypAAIjcDE2YTIwYmVjNTlmYWU0NjQ0YTE5Mzg0ODBlMWNlOTgyZXAxMA"
+        }
+      },
 	"devMode": true,
 	"host": null,
 	"port": "6001",
