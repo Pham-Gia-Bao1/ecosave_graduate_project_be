@@ -18,7 +18,7 @@
     "devMode": true,
     "host": null,
     "port": "6001",
-    "protocol": "https",
+    "protocol": "http",
     "socketio": {},
     "secureOptions": 67108864,
     "sslCertPath": "",
