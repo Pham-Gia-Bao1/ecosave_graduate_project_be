@@ -1,5 +1,5 @@
 {
-    "authHost": "https://ecoasve.zeabur.app/",
+    "authHost": "https://ecoasve.zeabur.app",
     "authEndpoint": "/broadcasting/auth",
     "clients": [
         {
@@ -10,29 +10,25 @@
     "database": "redis",
     "databaseConfig": {
         "redis": {
-            "host": "novel-bird-36009.upstash.io",
-            "port": "6379",
-            "password": "AYypAAIjcDE2YTIwYmVjNTlmYWU0NjQ0YTE5Mzg0ODBlMWNlOTgyZXAxMA"
+            "host": "hkg1.clusters.zeabur.com",
+            "port": "31736",
+            "password": "8HS9omFU0qeE3ruj2DQt1Z6sgBAc4h57"
         }
     },
-    "devMode": true,
-    "host": null,
+    "devMode": false,
+    "host": "0.0.0.0",
     "port": "6001",
-    "protocol": "http",
-    "socketio": {},
-    "secureOptions": 67108864,
-    "sslCertPath": "",
-    "sslKeyPath": "",
-    "sslCertChainPath": "",
-    "sslPassphrase": "",
+    "protocol": "https",
+    "sslCertPath": "/etc/letsencrypt/live/ecoasve.zeabur.app/fullchain.pem",
+    "sslKeyPath": "/etc/letsencrypt/live/ecoasve.zeabur.app/privkey.pem",
     "subscribers": {
         "http": true,
         "redis": true
     },
     "apiOriginAllow": {
-        "allowCors": false,
-        "allowOrigin": "",
-        "allowMethods": "",
-        "allowHeaders": ""
+        "allowCors": true,
+        "allowOrigin": "*",
+        "allowMethods": "GET, POST",
+        "allowHeaders": "Origin, Content-Type, Authorization"
     }
 }
