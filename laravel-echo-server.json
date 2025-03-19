@@ -1,38 +1,38 @@
 {
-	"authHost": "https://ecoasve.zeabur.app/",
-	"authEndpoint": "/broadcasting/auth",
-	"clients": [
-		{
-			"appId": "817b42d4ccf5b373",
-			"key": "7afcb95328da8d43346dbbe133b827c8"
-		}
-	],
-	"database": "redis",
+    "authHost": "https://ecoasve.zeabur.app/",
+    "authEndpoint": "/broadcasting/auth",
+    "clients": [
+        {
+            "appId": "817b42d4ccf5b373",
+            "key": "7afcb95328da8d43346dbbe133b827c8"
+        }
+    ],
+    "database": "redis",
     "databaseConfig": {
         "redis": {
-          "host": "novel-bird-36009.upstash.io",
-          "port": "6379",
-          "password": "AYypAAIjcDE2YTIwYmVjNTlmYWU0NjQ0YTE5Mzg0ODBlMWNlOTgyZXAxMA"
+            "host": "novel-bird-36009.upstash.io",
+            "port": "6379",
+            "password": "AYypAAIjcDE2YTIwYmVjNTlmYWU0NjQ0YTE5Mzg0ODBlMWNlOTgyZXAxMA"
         }
-      },
-	"devMode": true,
-	"host": null,
-	"port": "6001",
-	"protocol": "http",
-	"socketio": {},
-	"secureOptions": 67108864,
-	"sslCertPath": "",
-	"sslKeyPath": "",
-	"sslCertChainPath": "",
-	"sslPassphrase": "",
-	"subscribers": {
-		"http": true,
-		"redis": true
-	},
-	"apiOriginAllow": {
-		"allowCors": false,
-		"allowOrigin": "",
-		"allowMethods": "",
-		"allowHeaders": ""
-	}
+    },
+    "devMode": true,
+    "host": null,
+    "port": "6001",
+    "protocol": "https",
+    "socketio": {},
+    "secureOptions": 67108864,
+    "sslCertPath": "",
+    "sslKeyPath": "",
+    "sslCertChainPath": "",
+    "sslPassphrase": "",
+    "subscribers": {
+        "http": true,
+        "redis": true
+    },
+    "apiOriginAllow": {
+        "allowCors": false,
+        "allowOrigin": "",
+        "allowMethods": "",
+        "allowHeaders": ""
+    }
 }
