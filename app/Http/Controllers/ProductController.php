@@ -41,9 +41,9 @@ class ProductController extends Controller
         if ($request->filled('name')) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->name}%")
-                  ->orWhereHas('store', function ($q2) use ($request) {
-                      $q2->where('store_name', 'like', "%{$request->name}%");
-                  });
+                    ->orWhereHas('store', function ($q2) use ($request) {
+                        $q2->where('store_name', 'like', "%{$request->name}%");
+                    });
             });
         }
 
@@ -177,15 +177,28 @@ class ProductController extends Controller
         ];
     }
 
-    public function getProductsByStoreName($storeId)
+    public function getProductsByStoreName($storeId, Request $request)
     {
         if (!$this->checkStoreAccess($storeId)) {
             return ApiResponse::error("Bạn không có quyền truy cập", [], 403);
         }
 
-        $products = Product::where('store_id', $storeId)
-            ->with(['store', 'category', 'images'])
-            ->paginate(10);
+        $query = Product::where('store_id', $storeId)
+            ->with(['store', 'category', 'images']);
+
+        if ($request->filled('search')) {
+            $search = $request->query('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->query('category_id'));
+        }
+
+        $products = $query->latest()->paginate(10);
 
         return ApiResponse::success($products, "Lấy danh sách sản phẩm thành công");
     }
