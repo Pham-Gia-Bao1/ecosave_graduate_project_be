@@ -12,7 +12,9 @@
         "redis": {
             "host": "hkg1.clusters.zeabur.com",
             "port": "31736",
-            "password": "PaHBTv3LoDCc0W8J4V5md792F1UXsb6Z"
+            "password": "PaHBTv3LoDCc0W8J4V5md792F1UXsb6Z",
+            "tls": false,
+            "tcp" : true
         }
     },
     "devMode": false,
