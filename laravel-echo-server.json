@@ -10,24 +10,24 @@
     "database": "redis",
     "databaseConfig": {
         "redis": {
-            "host": "novel-bird-36009.upstash.io",
-            "port": "6379",
-            "password": "AYypAAIjcDE2YTIwYmVjNTlmYWU0NjQ0YTE5Mzg0ODBlMWNlOTgyZXAxMA",
-            "tls": {}
-    },
-    "devMode": false,
-    "host": "0.0.0.0",
-    "port": "6001",
-    "protocol": "http",
-    "secure": false,
-    "subscribers": {
-        "http": true,
-        "redis": true
-    },
-    "apiOriginAllow": {
-        "allowCors": true,
-        "allowOrigin": "*",
-        "allowMethods": "GET, POST",
-        "allowHeaders": "Origin, Content-Type, Authorization"
+            "host": "fra1.clusters.zeabur.com",
+            "port": "32643",
+            "password": "3mx98yEJr0v72Nlo1YGMbt45LpVTBh6q"
+        },
+        "devMode": false,
+        "host": "0.0.0.0",
+        "port": "6001",
+        "protocol": "http",
+        "secure": false,
+        "subscribers": {
+            "http": true,
+            "redis": true
+        },
+        "apiOriginAllow": {
+            "allowCors": true,
+            "allowOrigin": "*",
+            "allowMethods": "GET, POST",
+            "allowHeaders": "Origin, Content-Type, Authorization"
+        }
     }
 }
