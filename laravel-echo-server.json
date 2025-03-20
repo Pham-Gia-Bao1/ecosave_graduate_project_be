@@ -12,15 +12,14 @@
         "redis": {
             "host": "hkg1.clusters.zeabur.com",
             "port": "31736",
-            "password": "8HS9omFU0qeE3ruj2DQt1Z6sgBAc4h57"
+            "password": "PaHBTv3LoDCc0W8J4V5md792F1UXsb6Z"
         }
     },
     "devMode": false,
     "host": "0.0.0.0",
     "port": "6001",
-    "protocol": "https",
-    "sslCertPath": "/etc/letsencrypt/live/ecoasve.zeabur.app/fullchain.pem",
-    "sslKeyPath": "/etc/letsencrypt/live/ecoasve.zeabur.app/privkey.pem",
+    "protocol": "http",
+    "secure": false,
     "subscribers": {
         "http": true,
         "redis": true
