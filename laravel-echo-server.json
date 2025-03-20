@@ -10,11 +10,11 @@
     "database": "redis",
     "databaseConfig": {
         "redis": {
-            "host": "hkg1.clusters.zeabur.com",
-            "port": "31736",
-            "password": "PaHBTv3LoDCc0W8J4V5md792F1UXsb6Z",
-            "tls": false,
-            "tcp" : true
+            "host": "novel-bird-36009.upstash.io",
+            "port": "6379",
+            "password": "AYypAAIjcDE2YTIwYmVjNTlmYWU0NjQ0YTE5Mzg0ODBlMWNlOTgyZXAxMA",
+            "tls": true
+
         }
     },
     "devMode": false,
