@@ -13,10 +13,7 @@
             "host": "novel-bird-36009.upstash.io",
             "port": "6379",
             "password": "AYypAAIjcDE2YTIwYmVjNTlmYWU0NjQ0YTE5Mzg0ODBlMWNlOTgyZXAxMA",
-            "tls": {
-                "rejectUnauthorized": false
-            }
-        }
+            "tls": {}
     },
     "devMode": false,
     "host": "0.0.0.0",
