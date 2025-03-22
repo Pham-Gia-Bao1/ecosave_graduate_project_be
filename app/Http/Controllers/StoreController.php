@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class StoreController extends Controller
 {
@@ -112,11 +112,28 @@ class StoreController extends Controller
 
             if ($request->hasFile('avatar')) {
                 $file = $request->file('avatar');
-                $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
 
-                $path = $file->storeAs('uploads/avatars', $fileName, 'public');
+                // Cloudinary configuration
+                $cloudName = "dugeyusti";
+                $presetName = "expert_upload";
+                $folderName = "BitStorm";
 
-                $validatedData['avatar'] = url('storage/' . $path);
+                // Upload to Cloudinary
+                $response = Http::attach(
+                    'file',
+                    file_get_contents($file->path()),
+                    $file->getClientOriginalName()
+                )->post("https://api.cloudinary.com/v1_1/{$cloudName}/image/upload", [
+                    'upload_preset' => $presetName,
+                    'folder' => $folderName,
+                ]);
+
+                if ($response->successful()) {
+                    $responseData = $response->json();
+                    $validatedData['avatar'] = $responseData['secure_url'];
+                } else {
+                    return ApiResponse::error(null, "Lỗi khi tải lên ảnh đại diện!", 500);
+                }
             }
 
             $store->update($validatedData);
@@ -125,10 +142,9 @@ class StoreController extends Controller
         } catch (ValidationException $e) {
             return ApiResponse::error($e->errors(), "Dữ liệu không hợp lệ!", 422);
         } catch (\Exception $e) {
-            return ApiResponse::error(null, "Có lỗi xảy ra!", 500);
+            return ApiResponse::error(null, "Có lỗi xảy ra: " . $e->getMessage(), 500);
         }
     }
-
 
     // Xóa cửa hàng (soft delete)
     public function destroy($id)

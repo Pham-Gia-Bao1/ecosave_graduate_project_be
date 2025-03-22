@@ -327,17 +327,30 @@ class ProductController extends Controller
         return ApiResponse::success(null, "Sản phẩm đã được xóa thành công");
     }
 
-    public function getTrashedProductsByStore($storeId)
+    public function getTrashedProductsByStore($storeId, Request $request)
     {
         try {
             if (!$this->checkStoreAccess($storeId)) {
                 return ApiResponse::error("Bạn không có quyền truy cập cửa hàng này", [], 403);
             }
 
-            $products = Product::onlyTrashed()
+            $query = Product::onlyTrashed()
                 ->where('store_id', $storeId)
-                ->with(['store', 'category', 'images'])
-                ->paginate(10);
+                ->with(['store', 'category', 'images']);
+
+            if ($request->filled('search')) {
+                $search = $request->query('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%{$search}%"));
+                });
+            }
+
+            if ($request->filled('category_id')) {
+                $query->where('category_id', $request->query('category_id'));
+            }
+
+            $products = $query->paginate(10);
 
             return ApiResponse::success($products, "Lấy danh sách sản phẩm đã xóa thành công");
         } catch (\Exception $e) {
