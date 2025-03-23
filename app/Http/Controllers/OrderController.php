@@ -133,11 +133,19 @@ class OrderController extends Controller
             }
 
             return $next($request);
-        })->except(['index', 'store', 'show', 'update', 'destroy','getUserOrders']);
+        })->except(['index', 'store', 'show', 'update', 'destroy', 'getUserOrders']);
     }
 
     public function getOrdersByStore(Request $request, $storeId)
     {
+        if ($this->storeId === null) {
+            $user = Auth::user();
+            if ($user && $user->role === 3) {
+                $store = Store::where('user_id', $user->id)->first();
+                $this->storeId = $store ? $store->id : null;
+            }
+        }
+
         if (!$this->storeId || $this->storeId != $storeId) {
             return ApiResponse::error("Bạn không có quyền truy cập", [], 403);
         }
@@ -268,21 +276,38 @@ class OrderController extends Controller
 
     private function formatOrder($order)
     {
+        // Kiểm tra nếu order tồn tại
+        if (!$order) {
+            return null;
+        }
+
         $firstItem = $order->orderItems->isNotEmpty() ? $order->orderItems->first() : null;
-        $firstProduct = $firstItem ? $firstItem->product : null;
-        $firstImage = $firstProduct && $firstProduct->images->isNotEmpty()
+        $firstProduct = $firstItem && $firstItem->product ? $firstItem->product : null;
+        $firstImage = $firstProduct && $firstProduct->images && $firstProduct->images->isNotEmpty()
             ? $firstProduct->images->first()->image_url
             : null;
+
+        // Kiểm tra user tồn tại
+        $userData = [
+            'id' => null,
+            'username' => 'N/A',
+            'email' => 'N/A',
+            'phone' => 'N/A',
+        ];
+
+        if ($order->user) {
+            $userData = [
+                'id' => $order->user->id,
+                'username' => $order->user->username ?? 'N/A',
+                'email' => $order->user->email ?? 'N/A',
+                'phone' => $order->user->phone_number ?? 'N/A',
+            ];
+        }
 
         return [
             'id' => $order->id,
             'order_code' => $order->order_code,
-            'user' => [
-                'id' => $order->user->id,
-                'username' => $order->user->username,
-                'email' => $order->user->email,
-                'phone' => $order->user->phone_number,
-            ],
+            'user' => $userData,
             'total_price' => $order->total_price,
             'status' => $order->status,
             'order_date' => $order->created_at,
@@ -293,13 +318,27 @@ class OrderController extends Controller
             ],
             'total_items' => $order->orderItems->count(),
             'items' => $order->orderItems->map(function ($item) {
+                // Kiểm tra product tồn tại
+                if (!$item || !$item->product) {
+                    return [
+                        'id' => $item ? $item->id : null,
+                        'product' => [
+                            'id' => null,
+                            'name' => 'N/A',
+                            'price' => 0,
+                            'image' => null,
+                        ],
+                        'quantity' => $item ? $item->quantity : 0,
+                    ];
+                }
+
                 return [
                     'id' => $item->id,
                     'product' => [
                         'id' => $item->product->id,
-                        'name' => $item->product->name,
+                        'name' => $item->product->name ?? 'N/A',
                         'price' => $item->price,
-                        'image' => $item->product->images->isNotEmpty()
+                        'image' => $item->product && $item->product->images && $item->product->images->isNotEmpty()
                             ? $item->product->images->first()->image_url
                             : null,
                     ],
@@ -310,51 +349,51 @@ class OrderController extends Controller
     }
 
     public function getUserOrders()
-{
-    $user = Auth::user(); // Lấy user hiện tại
-    if (!$user) {
-        return ApiResponse::error(null, "Unauthorized", 401);
-    }
+    {
+        $user = Auth::user(); // Lấy user hiện tại
+        if (!$user) {
+            return ApiResponse::error(null, "Unauthorized", 401);
+        }
 
-    $orders = Order::where('user_id', $user->id)
-        ->with(['store', 'orderItems.product'])
-        ->get()
-        ->groupBy('store_id');
+        $orders = Order::where('user_id', $user->id)
+            ->with(['store', 'orderItems.product'])
+            ->get()
+            ->groupBy('store_id');
 
-    $formattedOrders = $orders->map(function ($ordersByStore) {
-        $store = $ordersByStore->first()->store;
-        return [
-            'store_id' => $store->id,
-            'store_name' => $store->store_name,
-            'store_latitude' => $store->latitude,
-            'store_longitude' => $store->longitude,
-            'orders' => $ordersByStore->map(function ($order) {
-                return [
-                    'order_id' => $order->id,
-                    'order_code' => $order->order_code,
-                    'total_price' => $order->total_price,
-                    'status' => $order->status,
-                    'items' => $order->orderItems->map(function ($item) {
-                        $originalTotal = $item->product->original_price * $item->quantity;
-                        $discountedTotal = $item->product->discounted_price * $item->quantity;
-                        $savedAmount = $originalTotal - $discountedTotal;
+        $formattedOrders = $orders->map(function ($ordersByStore) {
+            $store = $ordersByStore->first()->store;
+            return [
+                'store_id' => $store->id,
+                'store_name' => $store->store_name,
+                'store_latitude' => $store->latitude,
+                'store_longitude' => $store->longitude,
+                'orders' => $ordersByStore->map(function ($order) {
+                    return [
+                        'order_id' => $order->id,
+                        'order_code' => $order->order_code,
+                        'total_price' => $order->total_price,
+                        'status' => $order->status,
+                        'items' => $order->orderItems->map(function ($item) {
+                            $originalTotal = $item->product->original_price * $item->quantity;
+                            $discountedTotal = $item->product->discounted_price * $item->quantity;
+                            $savedAmount = $originalTotal - $discountedTotal;
 
-                        return [
-                            'product_id' => $item->product->id,
-                            'product_name' => $item->product->name,
-                            'product_image' => $item->product->images->pluck('image_url'),
-                            'quantity' => $item->quantity,
-                            'sub_price' => $item->price,
-                            'unique_price' => $item->product->discounted_price,
-                            'original_price' => $item->product->original_price,
-                            'saved_amount' => $savedAmount, // Số tiền tiết kiệm được
-                        ];
-                    }),
-                    'order_date' => $order->order_date
-                ];
-            }),
-        ];
-    });
+                            return [
+                                'product_id' => $item->product->id,
+                                'product_name' => $item->product->name,
+                                'product_image' => $item->product->images->pluck('image_url'),
+                                'quantity' => $item->quantity,
+                                'sub_price' => $item->price,
+                                'unique_price' => $item->product->discounted_price,
+                                'original_price' => $item->product->original_price,
+                                'saved_amount' => $savedAmount, // Số tiền tiết kiệm được
+                            ];
+                        }),
+                        'order_date' => $order->order_date
+                    ];
+                }),
+            ];
+        });
 
         return ApiResponse::success($formattedOrders, "Orders fetched successfully");
     }

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class ImageController extends Controller
 {
@@ -17,17 +16,34 @@ class ImageController extends Controller
 
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
                 
-                // Store in storage/app/public/uploads/products
-                $path = $file->storeAs('uploads/products', $fileName, 'public');
+                // Cloudinary configuration
+                $cloudName = "dugeyusti";
+                $presetName = "expert_upload";
+                $folderName = "BitStorm";
                 
-                // Return full URL including domain
-                $url = url('storage/' . $path);
+                // Create multipart form data
+                $response = Http::attach(
+                    'file', 
+                    file_get_contents($file->path()), 
+                    $file->getClientOriginalName()
+                )->post("https://api.cloudinary.com/v1_1/{$cloudName}/image/upload", [
+                    'upload_preset' => $presetName,
+                    'folder' => $folderName,
+                ]);
                 
-                return response()->json([
-                    'url' => asset('storage/' . $path)
-                ]);                
+                if ($response->successful()) {
+                    $responseData = $response->json();
+                    
+                    return response()->json([
+                        'url' => $responseData['secure_url']
+                    ]);
+                } else {
+                    return response()->json([
+                        'error' => 'Lỗi khi tải lên Cloudinary',
+                        'message' => $response->body()
+                    ], 500);
+                }
             }
 
             return response()->json([
