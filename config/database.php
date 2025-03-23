@@ -120,24 +120,58 @@ return [
     */
 
     'redis' => [
-    'client' => env('REDIS_CLIENT', 'predis'),
+        'client' => env('REDIS_CLIENT', 'predis'),
 
-    'default' => [
-        'url' => env('REDIS_URL'),
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', '6379'),
-        'database' => env('REDIS_DB', 0),
-    ],
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', 0),
+        ],
 
-    'cache' => [
-        'url' => env('REDIS_URL'),
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', '6379'),
-        'database' => env('REDIS_CACHE_DB', 1),
-    ],
-],
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', 1),
+        ],
+
+        // Backup Redis servers
+        'backup_1' => [
+            'url' => env('REDIS_BACKUP_1_URL'),
+            'host' => env('REDIS_BACKUP_1_HOST', '127.0.0.1'),
+            'password' => env('REDIS_BACKUP_1_PASSWORD', null),
+            'port' => env('REDIS_BACKUP_1_PORT', '6379'),
+            'database' => env('REDIS_BACKUP_1_DB', 2),
+        ],
+
+        'backup_2' => [
+            'url' => env('REDIS_BACKUP_2_URL'),
+            'host' => env('REDIS_BACKUP_2_HOST', '127.0.0.1'),
+            'password' => env('REDIS_BACKUP_2_PASSWORD', null),
+            'port' => env('REDIS_BACKUP_2_PORT', '6379'),
+            'database' => env('REDIS_BACKUP_2_DB', 3),
+        ],
+
+        'backup_3' => [
+            'url' => env('REDIS_BACKUP_3_URL'),
+            'host' => env('REDIS_BACKUP_3_HOST', '127.0.0.1'),
+            'password' => env('REDIS_BACKUP_3_PASSWORD', null),
+            'port' => env('REDIS_BACKUP_3_PORT', '6379'),
+            'database' => env('REDIS_BACKUP_3_DB', 4),
+        ],
+
+        'backup_4' => [
+            'url' => env('REDIS_BACKUP_4_URL'),
+            'host' => env('REDIS_BACKUP_4_HOST', '127.0.0.1'),
+            'password' => env('REDIS_BACKUP_4_PASSWORD', null),
+            'port' => env('REDIS_BACKUP_4_PORT', '6379'),
+            'database' => env('REDIS_BACKUP_4_DB', 5),
+        ],
+
+    ]
 
 
 ];
