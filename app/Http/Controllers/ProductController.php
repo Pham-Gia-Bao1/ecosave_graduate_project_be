@@ -8,6 +8,7 @@ use App\Helpers\ApiResponse;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Store;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
