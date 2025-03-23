@@ -10,9 +10,39 @@
     "database": "redis",
     "databaseConfig": {
         "redis": {
-            "host": "fra1.clusters.zeabur.com",
-            "port": "32643",
-            "password": "3mx98yEJr0v72Nlo1YGMbt45LpVTBh6q"
+            "cluster": true,
+            "nodes": [
+                {
+                    "host": "fra1.clusters.zeabur.com",
+                    "port": 32643,
+                    "password": "3mx98yEJr0v72Nlo1YGMbt45LpVTBh6q",
+                    "db": 0
+                },
+                {
+                    "host": "fra1.clusters.zeabur.com",
+                    "port": 31952,
+                    "password": "4yFc9dnEz7Qa5ghUkj086qu3r2OK1Wfx",
+                    "db": 2
+                },
+                {
+                    "host": "fra1.clusters.zeabur.com",
+                    "port": 30978,
+                    "password": "1u56OsFB3c8KvmRg09IEPtA4hGk7LTi2",
+                    "db": 3
+                },
+                {
+                    "host": "fra1.clusters.zeabur.com",
+                    "port": 31271,
+                    "password": "7LKmIdR54i68w20al1pzGNZ3bXDYgC9o",
+                    "db": 4
+                },
+                {
+                    "host": "fra1.clusters.zeabur.com",
+                    "port": 32243,
+                    "password": "xWmV1U6N8H45Yu3279eQPhZvJtK0cEpq",
+                    "db": 5
+                }
+            ]
         },
         "devMode": false,
         "host": "0.0.0.0",
